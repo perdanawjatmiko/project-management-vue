@@ -29,6 +29,9 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'auth'
+})
 const token = useCookie('token');
 const { login } = useAuth();
 const router = useRouter();

@@ -1,18 +1,3 @@
-<script setup lang="ts">
-const { register } = useAuth();
-const router = useRouter();
-
-const name = ref('');
-const email = ref('');
-const password = ref('');
-
-const submit = async () => {
-  const success = await register({ name: name.value, email: email.value, password: password.value });
-  if (success) router.push('/dashboard');
-  else alert('Register gagal');
-};
-</script>
-
 <template>
   <div class="h-screen flex flex-col justify-center items-center bg-base-200">
     <h1 class="text-3xl font-bold mb-8">PMS <span class="text-emerald-600">Nuxt</span> JS</h1>
@@ -30,3 +15,21 @@ const submit = async () => {
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+definePageMeta({
+  layout: 'auth'
+})
+const { register } = useAuth();
+const router = useRouter();
+
+const name = ref('');
+const email = ref('');
+const password = ref('');
+
+const submit = async () => {
+  const success = await register({ name: name.value, email: email.value, password: password.value });
+  if (success) router.push('/dashboard');
+  else alert('Register gagal');
+};
+</script>

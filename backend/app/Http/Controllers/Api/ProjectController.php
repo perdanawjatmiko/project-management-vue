@@ -51,7 +51,8 @@ class ProjectController extends Controller
     {
         try {
             $this->authorize('view', $project);
-            return $project;
+            $data = Project::with(['owner', 'tasks'])->findOrFail($project->id);
+            return $data;
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
         } catch (\Throwable $e) {
