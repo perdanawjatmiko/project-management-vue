@@ -43,7 +43,7 @@ class TaskController extends Controller
                 'priority' => 'in:low,medium,high,urgent',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date',
-                'percentage' => 'nullable|integer|min:0|max:100',
+                'order' => 'nullable|integer|min:0|max:100',
                 'assigned_to' => 'nullable'
             ]);
 

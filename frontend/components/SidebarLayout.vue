@@ -2,10 +2,11 @@
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row">
     <!-- Sidebar -->
-    <aside class="bg-base-100 w-full lg:w-64 p-4 hidden lg:block border-r-1 border-gray-100">
-      <h2 class="text-xl font-bold mb-6">PMS Nuxt</h2>
-      <ul class="menu space-y-1">
-        <li v-for="item in menuItems" :key="item.label">
+    <aside class="bg-base-100 w-full lg:w-64 p-4 hidden lg:block border-r-1 border-gray-200">
+      <h2 class="text-2xl font-bold text-center">PMS Nuxt</h2>
+      <div class="divider my-2"></div>
+      <ul class="menu menu-lg space-y-1 w-full">
+        <li v-for="item in menuItems" :key="item.label" class="">
           <NuxtLink :to="item.to" class="font-medium">
             {{ item.label }}
           </NuxtLink>
@@ -39,7 +40,7 @@
               <img alt="User Avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
             </div>
           </div>
-          <ul class="menu menu-sm dropdown-content bg-base-100 mt-3 w-52 shadow rounded-box z-10">
+          <ul class="menu menu-lg dropdown-content bg-base-100 mt-3 w-52 shadow rounded-box z-10">
             <li><a>Profile</a></li>
             <li><a>Settings</a></li>
             <li><a @click="logout">Logout</a></li>
@@ -49,7 +50,7 @@
     </div>
 
     <!-- Main Content -->
-    <main class="flex-1 bg-base-100">
+    <main class="flex-1 bg-base-200">
       <slot />
     </main>
   </div>
@@ -62,5 +63,6 @@ const menuItems = [
   { label: 'Dashboard', to: '/dashboard' },
   { label: 'Projects', to: '/projects' },
   { label: 'Tasks', to: '/tasks' },
+  { label: 'Users', to: '/users' },
 ];
 </script>
