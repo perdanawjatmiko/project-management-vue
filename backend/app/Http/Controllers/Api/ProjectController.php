@@ -17,8 +17,21 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         try {
-            $projects = $request->user()->projects()->with('owner')->get();
-            return response()->json($projects);
+            $projects = $request->user()->projects()->with('owner', 'tasks')->get();
+            if($projects->count() == 0) {
+                return response()->json([
+                'message' => 'succes',
+                'status' => 204,
+                'total' => $projects->count(),
+                'data' => $projects
+            ], 200);
+            }
+            return response()->json([
+                'message' => 'succes',
+                'status' => 200,
+                'total' => $projects->count(),
+                'data' => $projects
+            ], 200);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
         } catch (\Throwable $e) {
@@ -45,7 +58,11 @@ class ProjectController extends Controller
 
             $project = Project::create($data);
 
-            return response()->json($project, 201);
+            return response()->json([
+                'message' => 'success',
+                'status' => 201,
+                'data' => $project
+            ], 201);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
         } catch (\Throwable $e) {
@@ -59,7 +76,11 @@ class ProjectController extends Controller
         try {
             $this->authorize('view', $project);
             $data = Project::with(['owner', 'tasks'])->findOrFail($project->id);
-            return $data;
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $data
+            ], 200);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
         } catch (\Throwable $e) {
@@ -84,7 +105,11 @@ class ProjectController extends Controller
 
             $project->update($data);
 
-            return $project;
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $project
+            ], 200);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
         } catch (\Throwable $e) {

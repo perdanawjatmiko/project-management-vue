@@ -22,7 +22,20 @@ class TaskController extends Controller
                 $query->where('owner_id', $request->user()->id);
             })->with(['project', 'parent', 'assigned'])->get();
 
-            return response()->json($tasks);
+            if($tasks->count() == 0) {
+                return response()->json([
+                'message' => 'succes',
+                'status' => 204,
+                'total' => $tasks->count(),
+                'data' => $tasks
+            ], 200);
+            }
+            return response()->json([
+                'message' => 'succes',
+                'status' => 200,
+                'total' => $tasks->count(),
+                'data' => $tasks
+            ], 200);
         } catch (Exception $e) {
             Log::error('Task index error: ' . $e->getMessage());
             return response()->json([
@@ -52,7 +65,12 @@ class TaskController extends Controller
 
             $task = Task::create($data);
 
-            return response()->json($task, 201);
+            return response()->json([
+                'message' => 'success',
+                'status' => 201,
+                'data' => $task
+            ], 201);
+            
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
@@ -77,7 +95,11 @@ class TaskController extends Controller
         try {
             $this->authorize('view', $task);
             $task->load(['assigned', 'project']);
-            return response()->json($task);
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $task
+            ], 200);
         } catch (AuthorizationException $e) {
             return response()->json([
                 'message' => 'Unauthorized access',
@@ -112,7 +134,11 @@ class TaskController extends Controller
 
             $task->update($data);
 
-            return response()->json($task);
+            return response()->json([
+                'message' => 'success',
+                'status' => 201,
+                'data' => $task
+            ], 201);
         } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation failed',
