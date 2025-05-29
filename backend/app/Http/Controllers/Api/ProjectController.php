@@ -18,7 +18,6 @@ class ProjectController extends Controller
     {
         try {
             $projects = $request->user()->projects()->with('owner')->get();
-
             return response()->json($projects);
         } catch (AuthorizationException $e) {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -34,9 +33,17 @@ class ProjectController extends Controller
             $data = $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'nullable|string',
+                'owner_id' => 'string',
+                'difficulty' => 'integer|min:1|max:5',
+                'start_date' => 'date|nullable',
+                'end_date' => 'date|nullable'
             ]);
 
-            $project = $request->user()->projects()->create($data);
+            if (!isset($data['owner_id'])) {
+                $data['owner_id'] = $request->user()->id;
+            }
+
+            $project = Project::create($data);
 
             return response()->json($project, 201);
         } catch (AuthorizationException $e) {
@@ -69,6 +76,10 @@ class ProjectController extends Controller
             $data = $request->validate([
                 'name' => 'required|string|max:255',
                 'description' => 'nullable|string',
+                'owner_id' => 'string',
+                'difficulty' => 'integer|min:1|max:5',
+                'start_date' => 'date|nullable',
+                'end_date' => 'date|nullable'
             ]);
 
             $project->update($data);
