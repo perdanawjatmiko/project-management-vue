@@ -20,7 +20,7 @@ class TaskController extends Controller
         try {
             $tasks = Task::whereHas('project', function ($query) use ($request) {
                 $query->where('owner_id', $request->user()->id);
-            })->with(['project', 'parent', 'assignedUser'])->get();
+            })->with(['project', 'parent', 'assigned'])->get();
 
             return response()->json($tasks);
         } catch (Exception $e) {
@@ -44,7 +44,8 @@ class TaskController extends Controller
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date',
                 'order' => 'nullable|integer|min:0|max:100',
-                'assigned_to' => 'nullable'
+                'assigned_to' => 'nullable|exists:users,id',
+                'percentage' => 'integer'
             ]);
 
             $this->authorize('create', [Task::class, $data['project_id']]);
@@ -75,7 +76,7 @@ class TaskController extends Controller
     {
         try {
             $this->authorize('view', $task);
-            $task->load(['assignedUser', 'project']);
+            $task->load(['assigned', 'project']);
             return response()->json($task);
         } catch (AuthorizationException $e) {
             return response()->json([
@@ -104,8 +105,9 @@ class TaskController extends Controller
                 'priority' => 'in:low,medium,high,urgent',
                 'start_date' => 'nullable|date',
                 'end_date' => 'nullable|date',
-                'percentage' => 'nullable|integer|min:0|max:100',
-                'assigned_to' => 'nullable',
+                'order' => 'nullable|integer|min:0|max:100',
+                'assigned_to' => 'nullable|exists:users,id',
+                'percentage' => 'integer'
             ]);
 
             $task->update($data);
