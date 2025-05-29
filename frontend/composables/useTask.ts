@@ -1,20 +1,8 @@
+import type { Task } from "~/types/task";
 export const useTask = () => {
     const token = useCookie('token');
     const config = useRuntimeConfig()
     const apiBase = config.public.apiBase;
-
-    interface Task {
-        id: number | string
-        project_id: string
-        subject: string
-        description: string
-        status: string
-        priority: 'low' | 'medium' | 'high' | 'urgent'
-        start_date: string
-        end_date: string
-        order: number
-        assigned_to: string | null
-    }
 
     const getTasks = async () => {
         try {
