@@ -97,6 +97,7 @@ class TaskController extends Controller
             $this->authorize('update', $task);
 
             $data = $request->validate([
+                'project_id' => 'required|exists:projects,id',
                 'subject' => 'required|string',
                 'description' => 'nullable|string',
                 'status' => 'required',

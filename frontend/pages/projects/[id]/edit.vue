@@ -33,6 +33,10 @@ const form = ref({
 
 onMounted(async () => {
   const data = await getProject(route.params.id as string);
+  if(!data) {
+    console.error("data not found")
+    return
+  }
   form.value = {
     name: data.name,
     description: data.description,
