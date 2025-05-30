@@ -17,18 +17,18 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         try {
-            $projects = $request->user()->projects()->with('owner', 'tasks')->get();
-            if($projects->count() == 0) {
-                return response()->json([
-                'message' => 'succes',
-                'status' => 204,
-                'total' => $projects->count(),
-                'data' => $projects
-            ], 200);
+            $query = Project::with('owner', 'tasks')->orderBy('created_at', 'desc');
+
+            // Cek apakah ada query string user
+            if ($request->has('user') && $request->user != '') {
+                $query->where('owner_id', $request->user);
             }
+
+            $projects = $query->get();
+
             return response()->json([
-                'message' => 'succes',
-                'status' => 200,
+                'message' => 'success',
+                'status' => $projects->isEmpty() ? 204 : 200,
                 'total' => $projects->count(),
                 'data' => $projects
             ], 200);
