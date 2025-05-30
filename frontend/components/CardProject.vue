@@ -5,7 +5,7 @@
       <p class="text-sm text-gray-500 line-clamp-2">{{ project.description || 'No description provided.' }}</p>
 
       <div class="mt-4 flex flex-col gap-2 text-sm text-gray-600">
-       <!-- <span><strong>Difficulty:</strong> {{ project.difficulty }}</span> -->
+       <span><strong>Difficulty:</strong> {{ project.difficulty }}</span>
         <span><strong>Owner:</strong> {{ project.owner?.name || 'You' }}</span>
       </div>
 
@@ -19,16 +19,10 @@
 </template>
 
 <script setup lang="ts">
+import type { Project } from '~/types/project';
+
 defineProps<{
-  project: {
-    id: string;
-    name: string;
-    description?: string;
-    difficulty: number;
-    owner?: {
-      name?: string;
-    };
-  };
+  project: Project
 }>();
 
 defineEmits(['delete']);

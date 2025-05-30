@@ -1,6 +1,7 @@
+import type { User } from '~/types/user';
 export const useAuth = () => {
   const token = useCookie('token');
-  const user = useState('user', () => null);
+  const user = useState<User | null>('user', () => null);
   const config = useRuntimeConfig();
   const apiBase = config.public.apiBase;
 

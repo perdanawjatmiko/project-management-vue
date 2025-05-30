@@ -21,7 +21,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useProject } from '~/composables/useProject';
 
-const { getProject, updateProject } = useProject();
+const { getProjectById, updateProject } = useProject();
 const route = useRoute();
 const router = useRouter();
 
@@ -32,7 +32,7 @@ const form = ref({
 });
 
 onMounted(async () => {
-  const data = await getProject(route.params.id as string);
+  const data = await getProjectById(route.params.id as string);
   if(!data) {
     console.error("data not found")
     return

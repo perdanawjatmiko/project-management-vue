@@ -1,45 +1,46 @@
-import type { Project } from "~/types/project"
+import type { Project, ProjectInput, ProjectResponse } from "~/types/project"
 export const useProject = () => {
   const token = useCookie('token')
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
 
-  const getProjects = async (): Promise<Project[]> => {
+  const getProjects = async (userId: string | null = null): Promise<Project[]> => {
     try {
-      const data = await $fetch<Project[]>('/projects', {
+      const query = userId ? `?user=${userId}` : ``;
+      const response = await $fetch<ProjectResponse>(`/projects${query}`, {
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      return data
+      return response.data
     } catch (e) {
       console.error('Failed to fetch projects:', e)
       return []
     }
   }
 
-  const getProjectById = async (id: string): Promise<Project | null> => {
+  const getProjectById = async (id: string): Promise<Project[] | null> => {
     try {
-      const res = await $fetch<Project>(`/projects/${id}`, {
+      const response = await $fetch<ProjectResponse>(`/projects/${id}`, {
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      return res
+      return response.data
     } catch (e) {
       console.error('Failed to fetch project', e)
       return null
     }
   }
 
-  // alias untuk getProjectById (jika tetap ingin dipertahankan)
-  const getProject = getProjectById
-
-  const createProject = async (data: Omit<Project, 'id'>): Promise<Project> => {
-    return await $fetch<Project>('/projects', {
+  const createProject = async (data: Omit<ProjectInput, 'id'>): Promise<Project> => {
+    const response = await $fetch<Project>('/projects', {
       method: 'POST',
       baseURL: apiBase,
       body: data,
       headers: { Authorization: `Bearer ${token.value}` },
     })
+    console.log(data)
+    console.log(response)
+    return response
   }
 
   const updateProject = async (
@@ -64,7 +65,6 @@ export const useProject = () => {
 
   return {
     getProjects,
-    getProject,
     createProject,
     updateProject,
     deleteProject,
