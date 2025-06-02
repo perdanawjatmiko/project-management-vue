@@ -6,7 +6,7 @@ export interface Task {
         subject: string
         description: string
         status: string
-        priority: 'low' | 'medium' | 'high' | 'urgent'
+        priority: string
         start_date: string
         end_date: string
         order: number
@@ -26,12 +26,11 @@ export interface TaskResponse {
 }
 
 export interface TaskInput {
-        id: number | string
         project_id: string
         subject: string
         description: string
         status: string
-        priority: 'low' | 'medium' | 'high' | 'urgent'
+        priority: string
         start_date: string
         end_date: string
         order: number

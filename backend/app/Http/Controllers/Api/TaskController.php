@@ -62,6 +62,9 @@ class TaskController extends Controller
             ]);
 
             $this->authorize('create', [Task::class, $data['project_id']]);
+            if($data['percentage'] === 100) {
+                $data['status'] = 'done';
+            }
 
             $task = Task::create($data);
 
@@ -131,6 +134,9 @@ class TaskController extends Controller
                 'assigned_to' => 'nullable|exists:users,id',
                 'percentage' => 'integer'
             ]);
+            if($data['percentage'] === 100) {
+                $data['status'] = 'done';
+            }
 
             $task->update($data);
 

@@ -1,83 +1,7 @@
 <template>
   <div class="p-2 md:p-4 lg:p-6">
     <h1 class="text-2xl font-bold mb-6">Edit Task</h1>
-    <form @submit.prevent="submit" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <!-- Project Select -->
-      <div>
-        <label for="project_id" class="block font-medium mb-1">Project</label>
-        <select v-model="form.project_id" class="select w-full" required>
-          <option disabled value="">Choose Project</option>
-          <option v-for="project in projects" :key="project.id" :value="project.id">
-            {{ project.name }}
-          </option>
-        </select>
-      </div>
-
-      <!-- Subject -->
-      <div>
-        <label for="subject" class="block font-medium mb-1">Subject</label>
-        <input v-model="form.subject" type="text" class="input w-full" required />
-      </div>
-
-      <!-- Description -->
-      <div class="md:col-span-2">
-        <label for="description" class="block font-medium mb-1">Description</label>
-        <textarea v-model="form.description" class="textarea w-full" rows="4" />
-      </div>
-
-      <!-- Status -->
-      <div>
-        <label for="status" class="block font-medium mb-1">Status</label>
-        <select v-model="form.status" class="select w-full" required>
-          <option disabled value="">Choose Status</option>
-          <option value="backlog">Backlog</option>
-          <option value="todo">To Do</option>
-          <option value="doing">Doing</option>
-          <option value="done">Done</option>
-        </select>
-      </div>
-
-      <!-- Priority -->
-      <div>
-        <label for="priority" class="block font-medium mb-1">Priority</label>
-        <select v-model="form.priority" class="select w-full">
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
-          <option value="urgent">Urgent</option>
-        </select>
-      </div>
-
-      <!-- Start Date -->
-      <div>
-        <label for="start_date" class="block font-medium mb-1">Start Date</label>
-        <input v-model="form.start_date" type="date" class="input w-full" />
-      </div>
-
-      <!-- End Date -->
-      <div>
-        <label for="end_date" class="block font-medium mb-1">End Date</label>
-        <input v-model="form.end_date" type="date" class="input w-full" />
-      </div>
-
-      <!-- Percentage -->
-      <div>
-        <label for="order" class="block font-medium mb-1">Percentage</label>
-        <input v-model.number="form.order" type="number" class="input w-full" min="0" max="100" />
-      </div>
-
-      <!-- Assigned To -->
-      <div>
-        <label for="assigned_to" class="block font-medium mb-1">Assigned To (User ID)</label>
-        <input v-model="form.assigned_to" type="text" class="input w-full" placeholder="User UUID (optional)" />
-      </div>
-
-      <!-- Buttons -->
-      <div class="md:col-span-2 flex gap-2 justify-end mt-4">
-        <button type="submit" class="btn btn-primary">Update</button>
-        <NuxtLink to="/tasks" class="btn btn-outline">Cancel</NuxtLink>
-      </div>
-    </form>
+    <TaskForm :form="form" :submit="submit"/>
   </div>
 </template>
 
@@ -87,6 +11,8 @@ import { useRouter, useRoute } from 'vue-router'
 import { useProject } from '~/composables/useProject'
 import { useTask } from '~/composables/useTask'
 import type { Project } from "~/types/project"
+import TaskForm from '~/components/Forms/TaskForm.vue'
+import type { TaskInput } from '~/types/task'
 
 const router = useRouter()
 const route = useRoute()
@@ -95,16 +21,17 @@ const { getTask, updateTask } = useTask()
 const taskId = route.params.id as string
 
 const projects = ref<Project[]>([])
-const form = ref({
+const form = ref<TaskInput>({
   project_id: '',
   subject: '',
   description: '',
   status: '',
-  priority: 'low',
+  priority: '',
   start_date: '',
   end_date: '',
   order: 0,
-  assigned_to: ''
+  assigned_to: '',
+  percentage: 0
 })
 
 const fetchData = async () => {
@@ -125,7 +52,8 @@ const fetchData = async () => {
     start_date: task.start_date,
     end_date: task.end_date,
     order: task.order,
-    assigned_to: task.assigned_to || ''
+    assigned_to: task.assigned_to || '',
+    percentage: task.percentage
   }
 }
 
