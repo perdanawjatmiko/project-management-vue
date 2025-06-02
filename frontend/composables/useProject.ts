@@ -18,9 +18,9 @@ export const useProject = () => {
     }
   }
 
-  const getProjectById = async (id: string): Promise<Project[] | null> => {
+  const getProjectById = async (id: string): Promise<Project | null> => {
     try {
-      const response = await $fetch<ProjectResponse>(`/projects/${id}`, {
+      const response = await $fetch<{data: Project}>(`/projects/${id}`, {
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })

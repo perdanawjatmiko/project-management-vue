@@ -46,9 +46,10 @@
 
 <script setup lang="ts">
 import { useTask } from '~/composables/useTask';
+import type { Task } from '~/types/task';
 
 const { getTasks } = useTask();
-const tasks = ref([]);
+const tasks = ref<Task[]>([]);
 const loading = ref(true);
 
 const fetchTasks = async () => {

@@ -40,12 +40,12 @@
 
       <div>
         <p class="text-gray-500">Progress</p>
-        <p>{{ task.order }}%</p>
+        <p>{{ task.percentage }}%</p>
       </div>
 
       <div>
         <p class="text-gray-500">Assigned To</p>
-        <p>{{ task.assigned_user?.name || '-' }}</p>
+        <p>{{ task.assigned?.name || '-' }}</p>
       </div>
     </div>
 

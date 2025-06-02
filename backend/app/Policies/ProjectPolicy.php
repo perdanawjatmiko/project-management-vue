@@ -10,12 +10,15 @@ class ProjectPolicy
 {
     public function view(User $user, Project $project)
     {
-        return $user->id === $project->owner_id;
+        // return $user->id === $project->owner_id;
+        return true;
+        // return $user->role === 'staff';
     }
 
     public function update(User $user, Project $project)
     {
-        return $user->id === $project->owner_id;
+        // return $user->id === $project->owner_id;
+        return true;
     }
 
     public function delete(User $user, Project $project)

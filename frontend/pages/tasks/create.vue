@@ -88,12 +88,13 @@ import { ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import { useProject } from '~/composables/useProject';
 import { useTask } from '~/composables/useTask';
+import type { Project } from '~/types/project';
 
 const router = useRouter();
 const { getProjects } = useProject();
 const { createTask } = useTask();
 
-const projects = ref([]);
+const projects = ref<Project[]>([]);
 
 const fetchProjects = async () => {
   projects.value = await getProjects();

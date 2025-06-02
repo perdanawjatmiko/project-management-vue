@@ -7,6 +7,8 @@ export interface Project {
     owner_id: string | null
     difficulty: number
     owner: User
+    start_date: string
+    end_date: string
 }
 
 export interface ProjectResponse {
