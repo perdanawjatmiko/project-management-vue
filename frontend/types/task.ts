@@ -1,4 +1,5 @@
 import type { Project } from "./project"
+import type { User } from "./user"
 
 export interface Task {
         id: number | string
@@ -16,6 +17,7 @@ export interface Task {
         created_at: string
         updated_at: string | null
         deleted_at: string | null
+        assigned: User
     }
 
 export interface TaskResponse {

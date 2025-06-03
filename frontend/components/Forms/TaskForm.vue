@@ -74,7 +74,7 @@
     <!-- Buttons -->
     <div class="md:col-span-2 flex gap-2 justify-end mt-4">
       <button type="submit" class="btn btn-primary">Create</button>
-      <NuxtLink to="/tasks" class="btn btn-outline">Cancel</NuxtLink>
+      <button type="button" class="btn btn-outline" @click="handleCancel">Cancel</button>
     </div>
   </form>
 </template>
@@ -87,14 +87,27 @@ import type { TaskInput } from '~/types/task';
 import { useUser } from '~/composables/useUser';
 import type { User } from '~/types/user';
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   form: TaskInput,
-  submit: () => void
-}>();
+  submit: () => void,
+  isModal?: boolean
+}>(), {
+  isModal: false
+});
+
 const {getUsers} = useUser()
 const users = ref<User[]>([])
 const { getProjects } = useProject();
 const projects = ref<Project[]>([]);
+
+const handleCancel = () => {
+  if (props.isModal) {
+    const modal = document.getElementById('add_task') as HTMLDialogElement;
+    modal?.close();
+  } else {
+    navigateTo('/tasks');
+  }
+};
 
 onMounted(async () => {
   projects.value = await getProjects();

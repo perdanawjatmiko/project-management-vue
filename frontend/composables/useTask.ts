@@ -11,7 +11,6 @@ export const useTask = () => {
                 headers: { Authorization: `Bearer ${token.value}` },
             });
             if(!response) return [];
-            console.log(response.data)
             return response.data
         } catch (error) {
             console.error("failed to fetch tasks", error);
@@ -21,13 +20,13 @@ export const useTask = () => {
 
     const createTask = async (data: any) => {
         try {
-            const create = await $fetch('/tasks', {
+            const response = await $fetch<TaskResponse>('/tasks', {
                 method: 'POST',
                 baseURL: apiBase,
                 headers: { Authorization: `Bearer ${token.value}` },
                 body: data
             });
-            return create
+            return response.data
         } catch (error) {
             console.error("failed to add tasks", error);
             return []

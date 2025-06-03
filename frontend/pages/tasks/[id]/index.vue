@@ -61,7 +61,7 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watchEffect } from 'vue'
 import { useTask } from '~/composables/useTask'
 
 const route = useRoute()

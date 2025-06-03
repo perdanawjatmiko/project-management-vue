@@ -1,10 +1,10 @@
 <template>
-    <div class="p-2 md:p-4 max-w-4xl mx-auto">
+    <div class="p-2 md:p-4 w-full text-sm md:text-base">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
             <div class="flex justify-end items-center gap-2">
-                <NuxtLink :to="`/projects`" class="btn btn-primary">Back to Projects</NuxtLink>
-                <NuxtLink :to="`/projects/${project?.id}/edit`" class="btn btn-secondary">Edit</NuxtLink>
+                <NuxtLink :to="`/projects`" class="btn btn-primary btn-sm md:btn-md">Back to Projects</NuxtLink>
+                <NuxtLink :to="`/projects/${project?.id}/edit`" class="btn btn-secondary btn-sm md:btn-md">Edit</NuxtLink>
             </div>
         </div>
 
@@ -48,28 +48,23 @@
                     </p>
                 </div>
                 <div class="bg-base-100 p-4 rounded shadow col-span-2">
-                    <div class="flex justify-between items-center mb-2">
+                    <div class="flex justify-between items-center mb-4">
                         <h3 class="font-semibold">Tasks on this project</h3>
-                        <NuxtLink :to="`/projects/${project.id}/tasks/create`" class="btn btn-sm btn-primary">+ Add Task
-                        </NuxtLink>
+                        <button class="btn btn-sm btn-primary" onclick="add_task.showModal()">add task</button>
+                        <dialog id="add_task" class="modal modal-bottom sm:modal-middle">
+                        <div class="modal-box">
+                            <h3 class="text-lg font-bold">Add Task</h3>
+                            <p class="py-4">Press ESC key or click the button below to close</p>
+                            <TaskForm :form="form" :submit="submit" :isModal="true"/>
+                            <form method="dialog">
+                                <!-- if there is a button in form, it will close the modal -->
+                                <button class="btn">Close</button>
+                            </form>
+                        </div>
+                        </dialog>
                     </div>
-                    <ul v-if="project.tasks && project.tasks.length > 0" class="space-y-2">
-                        <li v-for="task in project.tasks" :key="task.id"
-                            class="p-3 shadow-sm rounded hover:bg-base-200 transition">
-                            <div class="flex justify-between">
-                                <div class="flex justify-start items-center gap-2">
-                                    <p class="font-medium">{{ task.subject }}</p>
-                                    <span class="badge badge-sm badge-success text-white capitalize">
-                                        {{ task.status || '-' }}
-                                    </span>
-                                </div>
-                                <div class="flex gap-2 items-center">
-                                    <NuxtLink :to="`/tasks/${task.id}/edit`" class="btn btn-sm btn-outline">Edit
-                                    </NuxtLink>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
+                    <TaskTable v-if="project.tasks && project.tasks.length > 0" :tasks="project.tasks" :showProject="false" />
+                    
                     <p v-else class="text-gray-500 italic">No tasks found for this project.</p>
                 </div>
             </div>
@@ -81,7 +76,14 @@
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
+import TaskForm from '~/components/Forms/TaskForm.vue'
+import TaskTable from '~/components/Tables/TaskTable.vue';
 import { useProject } from '~/composables/useProject'
+import { useTask } from '~/composables/useTask';
+import type { TaskInput } from '~/types/task';
+
+const router = useRouter();
+const { createTask } = useTask();
 
 const route = useRoute()
 const id = route.params.id as string
@@ -90,9 +92,23 @@ const { getProjectById } = useProject()
 const project = ref<any>(null)
 const loading = ref(true)
 
+const form = ref<TaskInput>({
+  project_id: '',
+  subject: '',
+  description: '',
+  status: '',
+  priority: 'low',
+  percentage: 0,
+  start_date: '',
+  end_date: '',
+  order: 0,
+  assigned_to: ''
+});
+
 const fetchProject = async () => {
     loading.value = true
     project.value = await getProjectById(id)
+    form.value.project_id = project.value.id;
     loading.value = false
 }
 
@@ -107,6 +123,35 @@ const formatDate = (dateStr: string | null) => {
         minute: 'numeric'
     })
 }
+
+
+const submit = async () => {
+  try {
+    const newTask = await createTask(form.value);
+    project.value.tasks.push(newTask); // update list secara langsung
+
+    // reset form kalau perlu
+    Object.assign(form.value, {
+    project_id: project.value.id,
+    subject: '',
+    description: '',
+    status: '',
+    priority: 'low',
+    percentage: 0,
+    start_date: '',
+    end_date: '',
+    order: 0,
+    assigned_to: ''
+    });
+
+    // tutup modal secara manual
+    const modal = document.getElementById('add_task') as HTMLDialogElement;
+    modal?.close();
+  } catch (error) {
+    console.error('Failed to create task:', error);
+    alert('Failed to create task. Please check the form or console.');
+  }
+};
 
 onMounted(fetchProject)
 </script>
