@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
+  <div class="p-2 md:p-4 lg:p-6 max-w-4xl mx-auto">
     <h1 class="text-2xl font-bold mb-4">Task Detail</h1>
 
     <div v-if="task" class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-base-100 p-6 rounded shadow">

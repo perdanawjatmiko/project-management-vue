@@ -66,7 +66,9 @@
     <!-- Assigned To -->
     <div>
       <label for="assigned_to" class="block font-medium mb-1">Assigned To (User ID)</label>
-      <input v-model="form.assigned_to" type="text" class="input w-full" placeholder="User UUID (optional)" />
+      <select v-model="form.assigned_to" class="select w-full">
+          <option v-for="user in users" :key="user.id" :value="user.id">{{ user.name }}</option>
+      </select>
     </div>
 
     <!-- Buttons -->
@@ -82,16 +84,20 @@ import { ref, onMounted } from 'vue';
 import { useProject } from '~/composables/useProject';
 import type { Project } from '~/types/project';
 import type { TaskInput } from '~/types/task';
+import { useUser } from '~/composables/useUser';
+import type { User } from '~/types/user';
 
 const props = defineProps<{
   form: TaskInput,
   submit: () => void
 }>();
-
+const {getUsers} = useUser()
+const users = ref<User[]>([])
 const { getProjects } = useProject();
 const projects = ref<Project[]>([]);
 
 onMounted(async () => {
   projects.value = await getProjects();
+  users.value = await getUsers();
 });
 </script>

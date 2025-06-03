@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 max-w-xl mx-auto">
+  <div class="p-2 md:p-4 lg:p-6 max-w-xl">
     <h1 class="text-2xl font-bold mb-4">Edit Project</h1>
     <ProjectForm :form="form" :submit="submit" />
   </div>

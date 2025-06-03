@@ -1,5 +1,5 @@
 <template>
-    <div class="p-6 max-w-4xl mx-auto">
+    <div class="p-2 md:p-4 lg:p-6 max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
             <div class="flex justify-end items-center gap-2">
