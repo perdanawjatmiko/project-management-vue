@@ -1,13 +1,15 @@
-import type { User } from '~/types/user';
+import type { TokenResponse, User } from '~/types/user';
 export const useAuth = () => {
-  const token = useCookie('token');
+  const token = useCookie('token', {
+    maxAge: 7200
+  });
   const user = useState<User | null>('user', () => null);
   const config = useRuntimeConfig();
   const apiBase = config.public.apiBase;
 
   const login = async (email: string, password: string) => {
     try {
-      const res = await $fetch(`${apiBase}/login`, {
+      const res = await $fetch<TokenResponse>(`${apiBase}/login`, {
         method: 'POST',
         body: { email, password },
       });
@@ -23,7 +25,7 @@ export const useAuth = () => {
 
   const register = async (data: { name: string; email: string; password: string }) => {
     try {
-      const res = await $fetch(`${apiBase}/register`, {
+      const res = await $fetch<TokenResponse>(`${apiBase}/register`, {
         method: 'POST',
         body: data,
       });
@@ -41,7 +43,7 @@ export const useAuth = () => {
     if (!token.value) return;
 
     try {
-      const res = await $fetch(`${apiBase}/profile`, {
+      const res = await $fetch<User>(`${apiBase}/profile`, {
         headers: { Authorization: `Bearer ${token.value}` },
       });
       user.value = res;
