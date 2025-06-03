@@ -1,12 +1,11 @@
 <template>
-    <div class="p-2 md:p-4 lg:p-6 max-w-4xl mx-auto">
+    <div class="p-2 md:p-4 max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">{{ project?.name }}</h1>
             <div class="flex justify-end items-center gap-2">
                 <NuxtLink :to="`/projects`" class="btn btn-primary">Back to Projects</NuxtLink>
                 <NuxtLink :to="`/projects/${project?.id}/edit`" class="btn btn-secondary">Edit</NuxtLink>
             </div>
-
         </div>
 
         <div v-if="loading" class="text-center">Loading project...</div>
@@ -50,7 +49,7 @@
                 </div>
                 <div class="bg-base-100 p-4 rounded shadow col-span-2">
                     <div class="flex justify-between items-center mb-2">
-                        <h3 class="font-semibold">Tasks</h3>
+                        <h3 class="font-semibold">Tasks on this project</h3>
                         <NuxtLink :to="`/projects/${project.id}/tasks/create`" class="btn btn-sm btn-primary">+ Add Task
                         </NuxtLink>
                     </div>
