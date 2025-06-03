@@ -26,7 +26,7 @@
                         <tr v-for="(task, index) in tasks" :key="index">
                             <th>{{ index + 1 }}</th>
                             <td class="text-nowrap">
-                                <NuxtLink :to="`/tasks/${task.id}`" class="link text-primary font-semibold">{{ task.subject }}</NuxtLink>
+                                <NuxtLink :to="`/tasks/${task.id}`" class="link link-hover text-primary font-semibold">{{ task.subject }}</NuxtLink>
                                 <br>
                                 <em class="text-xs md:text-sm text-gray-500">{{ task.description }}</em>
                             </td>
