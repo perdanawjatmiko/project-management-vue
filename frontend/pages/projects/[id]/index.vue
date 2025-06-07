@@ -47,7 +47,7 @@
                         {{ formatDate(project.updated_at) }}
                     </p>
                 </div>
-                <div class="bg-base-100 p-4 rounded shadow col-span-2">
+                <div class="bg-base-100 p-4 rounded shadow md:col-span-2">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-semibold">Tasks on this project</h3>
                         <button class="btn btn-sm btn-primary" onclick="add_task.showModal()">add task</button>

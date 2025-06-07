@@ -11,23 +11,13 @@
       <div v-if="tasks.length === 0">No Tasks found.</div>
       <TaskTable v-else :tasks="tasks" />
       <!-- Pagination -->
-            <div class="flex justify-center mt-4">
-              <div class="join">
-                <button
-                  v-for="page in pagination.last_page"
-                  :key="page"
-                  @click="fetchTasks(page)"
-                  :class="['join-item btn', { 'btn-active': page === currentPage }]"
-                >
-                  {{ page }}
-                </button>
-              </div>
-            </div>
+      <Pagination :currentPage="currentPage" :lastPage="pagination.last_page" @change-page="fetchTasks" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import Pagination from '~/components/Pagination.vue';
 import TaskTable from '~/components/Tables/TaskTable.vue'
 import { useTask } from '~/composables/useTask';
 import type { Task } from '~/types/task';
@@ -46,16 +36,16 @@ const pagination = ref({
 const fetchTasks = async (page = 1) => {
   loading.value = true;
   const response = await getTasks(page);
-  if(response) {
+  if (response) {
 
     tasks.value = response.data
     loading.value = false;
     pagination.value = {
-        total: response.total,
-        per_page: response.per_page,
-        current_page: response.current_page,
-        last_page: response.last_page,
-      };
+      total: response.total,
+      per_page: response.per_page,
+      current_page: response.current_page,
+      last_page: response.last_page,
+    };
     currentPage.value = response.current_page;
   }
 };
