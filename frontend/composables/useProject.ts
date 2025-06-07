@@ -1,4 +1,4 @@
-import type { Project, ProjectInput, ProjectResponse } from "~/types/project"
+import type { Project, ProjectInput, ProjectOption, ProjectResponse } from "~/types/project"
 export const useProject = () => {
   const token = useCookie('token')
   const { $api } = useNuxtApp()
@@ -21,6 +21,22 @@ export const useProject = () => {
     } catch (e) {
       console.error('Failed to fetch projects:', e)
       return null
+    }
+  }
+
+  const getProjectOptions = async (): Promise<ProjectOption[]> => {
+    try {
+      const response = await $fetch<{ data: ProjectOption[] }>(
+        '/select/projects',
+        {
+          baseURL: apiBase,
+          headers: { Authorization: `Bearer ${token.value}` },
+        }
+      )
+      return response.data
+    } catch (e) {
+      console.error('Failed to fetch project options:', e)
+      return []
     }
   }
 
@@ -75,5 +91,6 @@ export const useProject = () => {
     updateProject,
     deleteProject,
     getProjectById,
+    getProjectOptions,
   }
 }

@@ -59,8 +59,12 @@
 
     <!-- Percentage -->
     <div>
-      <label for="order" class="block font-medium mb-1">Percentage</label>
-      <input v-model.number="form.percentage" type="number" class="input w-full" min="0" max="100" />
+      <label for="percentage" class="block font-medium mb-1">Percentage</label>
+      <select v-model.number="form.percentage" id="percentage" class="select w-full">
+        <option v-for="n in 11" :key="n" :value="(n - 1) * 10">
+          {{ (n - 1) * 10 }}%
+        </option>
+      </select>
     </div>
 
     <!-- Assigned To -->
@@ -82,7 +86,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useProject } from '~/composables/useProject';
-import type { Project } from '~/types/project';
+import type { ProjectOption } from '~/types/project';
 import type { TaskInput } from '~/types/task';
 import { useUser } from '~/composables/useUser';
 import type { User } from '~/types/user';
@@ -97,8 +101,8 @@ const props = withDefaults(defineProps<{
 
 const {getUsers} = useUser()
 const users = ref<User[]>([])
-const { getProjects } = useProject();
-const projects = ref<Project[]>([]);
+const { getProjectOptions } = useProject();
+const projects = ref<ProjectOption[]>([]);
 
 const handleCancel = () => {
   if (props.isModal) {
@@ -110,7 +114,7 @@ const handleCancel = () => {
 };
 
 onMounted(async () => {
-  projects.value = await getProjects();
+  projects.value = await getProjectOptions();
   users.value = await getUsers();
 });
 </script>

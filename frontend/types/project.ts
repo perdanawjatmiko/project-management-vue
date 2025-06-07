@@ -11,6 +11,11 @@ export interface Project {
     end_date: string
 }
 
+export interface ProjectOption {
+  id: string
+  name: string
+}
+
 export interface ProjectResponse {
     message: string,
     status: number,

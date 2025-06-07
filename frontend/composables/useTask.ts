@@ -3,18 +3,20 @@ export const useTask = () => {
     const token = useCookie('token');
     const config = useRuntimeConfig()
     const apiBase = config.public.apiBase;
+    const { $api } = useNuxtApp()
 
-    const getTasks = async (): Promise<Task[]> => {
+    const getTasks = async (page: number | null = 1): Promise<TaskResponse | null> => {
         try {
-            const response = await $fetch<TaskResponse>('/tasks', {
+            const queryParams = new URLSearchParams();
+            if (page) queryParams.append('page', page.toString());
+            const response = await $api<TaskResponse>(`/tasks?${queryParams.toString()}`, {
                 baseURL: apiBase,
                 headers: { Authorization: `Bearer ${token.value}` },
             });
-            if(!response) return [];
-            return response.data
+            return response
         } catch (error) {
             console.error("failed to fetch tasks", error);
-            return []
+            return null
         }
     }
 

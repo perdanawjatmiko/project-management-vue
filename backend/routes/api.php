@@ -16,6 +16,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     //Project Resources
     Route::apiResource('/projects', ProjectController::class);
+    Route::get('/select/projects', [ProjectController::class, 'select']);
 
     //Task Resource
     Route::apiResource('/tasks', TaskController::class);

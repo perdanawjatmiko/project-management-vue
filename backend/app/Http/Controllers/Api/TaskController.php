@@ -18,15 +18,16 @@ class TaskController extends Controller
     public function index(Request $request)
     {
         try {
-            $tasks = Task::whereHas('project', function ($query) use ($request) {
-                $query->where('owner_id', $request->user()->id);
-            })->with(['project', 'parent', 'assigned'])->get();
+            // $tasks = Task::whereHas('project', function ($query) use ($request) {
+            //     $query->where('owner_id', $request->user()->id);
+            // })->with(['project', 'parent', 'assigned'])->paginate(5);
+            $tasks = Task::where('assigned_to', $request->user()->id)->with(['project', 'parent', 'assigned'])->paginate(5);
 
             if($tasks->count() == 0) {
                 return response()->json([
                 'message' => 'succes',
                 'status' => 204,
-                'total' => $tasks->count(),
+                'total' => $tasks->total(),
                 'data' => $tasks
             ], 200);
             }
@@ -34,7 +35,10 @@ class TaskController extends Controller
                 'message' => 'succes',
                 'status' => 200,
                 'total' => $tasks->count(),
-                'data' => $tasks
+                'per_page' => $tasks->perPage(),
+                'current_page' => $tasks->currentPage(),
+                'last_page' => $tasks->lastPage(),
+                'data' => $tasks->items()
             ], 200);
         } catch (Exception $e) {
             Log::error('Task index error: ' . $e->getMessage());

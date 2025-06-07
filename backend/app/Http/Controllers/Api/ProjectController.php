@@ -44,6 +44,26 @@ class ProjectController extends Controller
         }
     }
 
+    public function select(Request $request)
+    {
+        try {
+            if($request->user()->role !== 'admin') {
+                $projects = Project::select('id', 'name')->where('owner_id', $request->user()->id)->orderBy('name')->get();
+            } else {
+                $projects = Project::select('id', 'name')->orderBy('name')->get();
+            }
+
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $projects
+            ]);
+        } catch (\Throwable $e) {
+            Log::error('Project Select Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to fetch project list'], 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

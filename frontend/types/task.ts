@@ -21,9 +21,12 @@ export interface Task {
     }
 
 export interface TaskResponse {
-    message: string,
-    status: number,
-    total: number,
+    message: string
+    status: number
+    total: number
+    per_page: number
+    current_page: number
+    last_page: number
     data: Task[]
 }
 
