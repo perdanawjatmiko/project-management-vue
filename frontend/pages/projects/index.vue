@@ -21,8 +21,21 @@
         <div class="tab-content bg-base-100 p-4 border-base-300">
           <div v-if="activeTab === 'all'">
             <div v-if="projects.length === 0">No projects found.</div>
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
               <CardProject v-for="project in projects" :key="project.id" :project="project" @delete="destroy" />
+            </div>
+            <!-- Pagination -->
+            <div class="flex justify-center mt-4">
+              <div class="join">
+                <button
+                  v-for="page in pagination.last_page"
+                  :key="page"
+                  @click="fetchProjects(page)"
+                  :class="['join-item btn', { 'btn-active': page === currentPage }]"
+                >
+                  {{ page }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -61,19 +74,34 @@ const allProjects = ref<Project[]>([]);
 const myProjects = ref<Project[]>([]);
 const loading = ref(true);
 const activeTab = ref<'all' | 'my'>('all');
+const currentPage = ref(1);
+const pagination = ref({
+  total: 0,
+  per_page: 10,
+  current_page: 1,
+  last_page: 1,
+});
 
-const fetchProjects = async () => {
+const fetchProjects = async (page = 1) => {
   loading.value = true;
   if (!user.value) await fetchUser();
 
-  if (activeTab.value === 'all') {
-    if (allProjects.value.length === 0) {
-      allProjects.value = await getProjects();
-    }
-  } else {
-    if (myProjects.value.length === 0) {
-      myProjects.value = await getProjects(user.value?.id);
-    }
+  const response = await getProjects(
+    activeTab.value === 'my' ? user.value?.id : undefined,
+    page
+  );
+
+  if (response) {
+    if (activeTab.value === 'all') allProjects.value = response.data;
+    else myProjects.value = response.data;
+
+    pagination.value = {
+      total: response.total,
+      per_page: response.per_page,
+      current_page: response.current_page,
+      last_page: response.last_page,
+    };
+    currentPage.value = response.current_page;
   }
 
   loading.value = false;

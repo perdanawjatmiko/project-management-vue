@@ -1,22 +1,33 @@
 export default defineNuxtPlugin((nuxtApp) => {
-  const config = useRuntimeConfig();
-  const token = useCookie('token');
+  const config = useRuntimeConfig()
+  const token = useCookie('token')
   const router = useRouter()
 
-  const axios = $fetch.create({
+  const api = $fetch.create({
     baseURL: config.public.apiBase,
-    onResponseError({response}) {
-      if (response.status === 403) {
-        token.value = null
-        router.push('/login')
+
+    // Set Authorization header sebelum request
+    async onRequest({ options }) {
+      if (token.value) {
+        options.headers = {
+          ...options.headers,
+          Authorization: `Bearer ${token.value}`,
+        }
       }
     },
-    headers: token.value ? { Authorization: `Bearer ${token.value}` } : {},
-  });
+
+    // Tangani error response (misal 401, 403, 405)
+    async onResponseError({ response }) {
+      if ([401, 403, 405].includes(response?.status)) {
+        token.value = null
+        await router.push('/login')
+      }
+    },
+  })
 
   return {
     provide: {
-      api: axios,
+      api,
     },
-  };
-});
+  }
+})

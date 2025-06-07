@@ -24,16 +24,20 @@ class ProjectController extends Controller
                 $query->where('owner_id', $request->user);
             }
 
-            $projects = $query->get();
+            $projects = $query->paginate(10);
 
             return response()->json([
                 'message' => 'success',
                 'status' => $projects->isEmpty() ? 204 : 200,
-                'total' => $projects->count(),
-                'data' => $projects
+                'total' => $projects->total(),
+                'per_page' => $projects->perPage(),
+                'current_page' => $projects->currentPage(),
+                'last_page' => $projects->lastPage(),
+                'data' => $projects->items()
             ], 200);
         } catch (AuthorizationException $e) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            Log::error('Project Index Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Unauthorized', 'status' => 403], 403);
         } catch (\Throwable $e) {
             Log::error('Project Index Error: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to load projects'], 500);

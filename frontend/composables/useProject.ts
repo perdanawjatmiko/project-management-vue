@@ -1,20 +1,26 @@
 import type { Project, ProjectInput, ProjectResponse } from "~/types/project"
 export const useProject = () => {
   const token = useCookie('token')
+  const { $api } = useNuxtApp()
   const config = useRuntimeConfig()
   const apiBase = config.public.apiBase
 
-  const getProjects = async (userId: string | null = null): Promise<Project[]> => {
+  const getProjects = async (userId: string | null = null, page: number | null = 1): Promise<ProjectResponse | null> => {
     try {
-      const query = userId ? `?user=${userId}` : ``;
-      const response = await $fetch<ProjectResponse>(`/projects${query}`, {
+      const queryParams = new URLSearchParams();
+      if (userId) queryParams.append('user', userId);
+      if (page) queryParams.append('page', page.toString());
+
+      const response = await $api<ProjectResponse>(`/projects?${queryParams.toString()}`, {
+        method: "GET",
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      return response.data
+      console.log(response)
+      return response
     } catch (e) {
       console.error('Failed to fetch projects:', e)
-      return []
+      return null
     }
   }
 

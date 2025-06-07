@@ -15,10 +15,10 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     //Project Resources
-    Route::apiResource('projects', ProjectController::class);
+    Route::apiResource('/projects', ProjectController::class);
 
     //Task Resource
-    Route::apiResource('tasks', TaskController::class);
+    Route::apiResource('/tasks', TaskController::class);
 
     //Comment Resource
     Route::get('/tasks/{task}/comments', [CommentController::class, 'index']);
