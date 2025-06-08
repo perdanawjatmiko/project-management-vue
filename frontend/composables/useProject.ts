@@ -1,3 +1,4 @@
+import type { ProjectCount } from "~/types/dashboard"
 import type { Project, ProjectInput, ProjectOption, ProjectResponse } from "~/types/project"
 export const useProject = () => {
   const token = useCookie('token')
@@ -85,6 +86,21 @@ export const useProject = () => {
     })
   }
 
+  const getProjectCount = async () => {
+    try {
+      const response = await $api<ProjectCount>(`/dashboard/projects`, {
+        method: "GET",
+        baseURL: apiBase,
+        headers: { Authorization: `Bearer ${token.value}` },
+      })
+
+      return response.total ?? 0
+    } catch (error) {
+      console.error('Failed to fetch projects:', error)
+      return 0
+    }
+  }
+
   return {
     getProjects,
     createProject,
@@ -92,5 +108,6 @@ export const useProject = () => {
     deleteProject,
     getProjectById,
     getProjectOptions,
+    getProjectCount,
   }
 }

@@ -1,3 +1,4 @@
+import type { TaskCount } from "~/types/dashboard";
 import type { Task, TaskResponse } from "~/types/task";
 export const useTask = () => {
     const token = useCookie('token');
@@ -68,5 +69,20 @@ export const useTask = () => {
         }
     }
 
-    return {getTasks, createTask, getTask, updateTask}
+    const getTaskCount = async () => {
+        try {
+          const response = await $api<TaskCount>(`/dashboard/tasks`, {
+            method: "GET",
+            baseURL: apiBase,
+            headers: { Authorization: `Bearer ${token.value}` },
+          })
+    
+          return response.total ?? 0
+        } catch (error) {
+          console.error('Failed to fetch tasks:', error)
+          return 0
+        }
+      }
+
+    return {getTasks, createTask, getTask, updateTask ,getTaskCount}
 }

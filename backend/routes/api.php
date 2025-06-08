@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CommentController;
+use App\Http\Controllers\Api\DashboardController;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\TaskController;
 use App\Http\Controllers\Api\UserController;
@@ -13,6 +14,10 @@ Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/profile', [AuthController::class, 'me']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    //Dashboard
+    Route::get('/dashboard/projects', [DashboardController::class, 'projectCount']);
+    Route::get('/dashboard/tasks', [DashboardController::class, 'taskCount']);
 
     //Project Resources
     Route::apiResource('/projects', ProjectController::class);
