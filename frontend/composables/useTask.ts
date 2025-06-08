@@ -1,5 +1,6 @@
 import type { TaskCount } from "~/types/dashboard";
 import type { Task, TaskResponse } from "~/types/task";
+import { showSuccess, showError, confirmDelete } from "~/utils/swal"
 export const useTask = () => {
     const token = useCookie('token');
     const config = useRuntimeConfig()
@@ -29,6 +30,7 @@ export const useTask = () => {
                 headers: { Authorization: `Bearer ${token.value}` },
                 body: data
             });
+            showSuccess('Task Created Successufully!')
             return response.data
         } catch (error) {
             console.error("failed to add tasks", error);
@@ -62,6 +64,7 @@ export const useTask = () => {
                 body: data,
                 headers: { Authorization: `Bearer ${token.value}` },
             })
+            showSuccess('Task Updated Successufully!')
             return response
         } catch (error) {
             console.error("failed to update task", error);
@@ -82,7 +85,26 @@ export const useTask = () => {
           console.error('Failed to fetch tasks:', error)
           return 0
         }
-      }
+    }
 
-    return {getTasks, createTask, getTask, updateTask ,getTaskCount}
+    const deleteTask = async (id: string, name: string): Promise<boolean> => {
+        const confirmed = await confirmDelete(name)
+        if (!confirmed) return false
+
+        try {
+        await $fetch(`/tasks/${id}`, {
+            method: 'DELETE',
+            baseURL: apiBase,
+            headers: { Authorization: `Bearer ${token.value}` },
+        })
+
+        showSuccess('Task deleted successfully')
+        return true
+        } catch (error: any) {
+        showError(error?.data?.message || 'Failed to delete project')
+        return false
+        }
+    }
+
+    return {getTasks, createTask, getTask, updateTask, getTaskCount, deleteTask}
 }

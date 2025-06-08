@@ -24,7 +24,7 @@
           <td class="capitalize">{{ task.status }}</td>
           <td class="flex justify-start items-center gap-1">
             <NuxtLink :to="`/tasks/${task.id}/edit`" class="btn btn-xs md:btn-sm btn-secondary">Edit</NuxtLink>
-            <NuxtLink :to="`/tasks/${task.id}`" class="btn btn-xs md:btn-sm btn-error">Delete</NuxtLink>
+            <button @click="destroy(task.id as string, task.subject)" class="btn btn-xs md:btn-sm btn-error">Delete</button>
           </td>
         </tr>
       </tbody>
@@ -34,6 +34,10 @@
 
 <script setup lang="ts">
 import type { Task } from '~/types/task';
+import { useTask } from '~/composables/useTask';
+
+const emit = defineEmits(['deleted'])
+const { deleteTask } = useTask()
 
 const props = withDefaults(defineProps<{
   tasks: Task[]
@@ -41,4 +45,9 @@ const props = withDefaults(defineProps<{
 }>(), {
     showProject: true
 })
+
+const destroy = async (id: string, name: string) => {
+  await deleteTask(id, name);
+  emit('deleted')
+}
 </script>

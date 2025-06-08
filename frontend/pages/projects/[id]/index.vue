@@ -60,7 +60,7 @@
                         </dialog>
                     </div>
 
-                    <TaskTable v-if="tasks.length > 0" :tasks="tasks" :showProject="false" />
+                    <TaskTable v-if="tasks.length > 0" :tasks="tasks" :showProject="false" @deleted="fetchTasks" />
                         <p v-else class="text-gray-500 italic">No tasks found for this project.</p>
                         <Pagination :currentPage="pagination.current_page" :lastPage="pagination.last_page" @change-page="fetchTasks"/>
                 </div>

@@ -9,7 +9,7 @@
 
     <div v-else>
       <div v-if="tasks.length === 0">No Tasks found.</div>
-      <TaskTable v-else :tasks="tasks" />
+      <TaskTable v-else :tasks="tasks" @deleted="fetchTasks"/>
       <!-- Pagination -->
       <Pagination :currentPage="currentPage" :lastPage="pagination.last_page" @change-page="fetchTasks" />
     </div>

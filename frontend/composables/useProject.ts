@@ -1,5 +1,6 @@
 import type { ProjectCount } from "~/types/dashboard"
 import type { Project, ProjectInput, ProjectOption, ProjectResponse } from "~/types/project"
+import { showSuccess, showError, confirmDelete } from "~/utils/swal"
 export const useProject = () => {
   const token = useCookie('token')
   const { $api } = useNuxtApp()
@@ -17,7 +18,6 @@ export const useProject = () => {
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      console.log(response)
       return response
     } catch (e) {
       console.error('Failed to fetch projects:', e)
@@ -61,29 +61,44 @@ export const useProject = () => {
       body: data,
       headers: { Authorization: `Bearer ${token.value}` },
     })
-    console.log(data)
-    console.log(response)
+    showSuccess('Project Created Successfully')
     return response
   }
 
-  const updateProject = async (
-    id: string,
-    data: Partial<Omit<Project, 'id'>>
-  ): Promise<Project> => {
-    return await $fetch<Project>(`/projects/${id}`, {
-      method: 'PUT',
-      baseURL: apiBase,
-      body: data,
-      headers: { Authorization: `Bearer ${token.value}` },
-    })
-  }
+  const updateProject = async (id: string, data: Partial<Omit<Project, "id">>): Promise<Project | undefined> => {
+    try {
+      const response = await $fetch<Project>(`/projects/${id}`, {
+        method: "PUT",
+        baseURL: apiBase,
+        body: data,
+        headers: { Authorization: `Bearer ${token.value}` },
+      });
 
-  const deleteProject = async (id: string): Promise<{ message: string }> => {
-    return await $fetch<{ message: string }>(`/projects/${id}`, {
-      method: 'DELETE',
-      baseURL: apiBase,
-      headers: { Authorization: `Bearer ${token.value}` },
-    })
+      showSuccess('Project updated successfully');
+      return response;
+    } catch (error: any) {
+      showError(error?.data?.message || 'Failed to update project');
+      return undefined;
+    }
+  };
+
+  const deleteProject = async (id: string, name: string): Promise<boolean> => {
+    const confirmed = await confirmDelete(name)
+    if (!confirmed) return false
+
+    try {
+      await $fetch(`/projects/${id}`, {
+        method: 'DELETE',
+        baseURL: apiBase,
+        headers: { Authorization: `Bearer ${token.value}` },
+      })
+
+      showSuccess('Project deleted successfully')
+      return true
+    } catch (error: any) {
+      showError(error?.data?.message || 'Failed to delete project')
+      return false
+    }
   }
 
   const getProjectCount = async () => {

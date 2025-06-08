@@ -117,11 +117,9 @@ const projects = computed(() => {
   return activeTab.value === 'all' ? allProjects.value : myProjects.value;
 });
 
-const destroy = async (id: string) => {
-    if (confirm('Are you sure you want to delete this project?')) {
-      await deleteProject(id);
-      fetchProjects();
-  };
+const destroy = async (id: string, name: string) => {
+  await deleteProject(id, name);
+  fetchProjects();
 }
 
 onMounted(fetchProjects);
