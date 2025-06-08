@@ -1,5 +1,5 @@
 <template>
-    <div class="navbar bg-base-100 shadow-sm hidden sm:flex">
+    <div class="navbar bg-base-100 shadow-sm sm:flex">
         <div class="navbar-start">
             
         </div>

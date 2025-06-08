@@ -1,5 +1,5 @@
 <template>
     <header>
-        <AppNavbar/>
+        <!-- <AppNavbar/> -->
     </header>
 </template>

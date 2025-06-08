@@ -1,63 +1,62 @@
 <!-- components/SidebarLayout.vue -->
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row">
-    <!-- Sidebar -->
-    <aside class="bg-base-100 w-full lg:w-64 p-4 hidden lg:block border-r-1 border-gray-200">
-      <h2 class="text-2xl font-bold text-center">PMS Nuxt</h2>
-      <div class="divider my-2"></div>
-      <ul class="menu menu-lg space-y-1 w-full">
-        <li v-for="item in menuItems" :key="item.label" class="">
-          <NuxtLink :to="item.to" class="font-medium">
-            {{ item.label }}
-          </NuxtLink>
-        </li>
-      </ul>
-    </aside>
-
-    <!-- Mobile Navbar -->
-    <div class="navbar bg-base-100 shadow-sm lg:hidden">
-      <div class="flex-1">
-        <div class="dropdown">
-          <label tabindex="0" class="btn btn-ghost">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
-              stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          </label>
-          <ul tabindex="0" class="menu menu-sm dropdown-content bg-base-100 mt-3 w-52 shadow rounded-box z-10">
-            <li v-for="item in menuItems" :key="item.label">
-              <NuxtLink :to="item.to">{{ item.label }}</NuxtLink>
+    <div class="drawer lg:drawer-open">
+      <label for="mainSidebar" class="btn btn-ghost drawer-button lg:hidden fixed top-2 left-2">
+          <Menu />
+      </label>
+      <input id="mainSidebar" type="checkbox" ref="drawerCheckbox" class="drawer-toggle" />
+      <div class="drawer-content flex flex-col justify-center w-full">
+        <!-- Main Content -->
+        <main class="flex-1 bg-base-200 min-h-screen pt-10 sm:pt-6">
+          <slot />
+        </main>
+      </div>
+      <div class="drawer-side">
+        <label for="mainSidebar" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="menu bg-base-100 text-base-content min-h-full w-80 p-4 flex-col justify-between">
+          <div class="flex justify-between items-center px-2">
+            <h1 class="text-2xl font-bold">PMS <span class="text-emerald-600">Nuxt</span> JS</h1>
+            <button @click="closeDrawer" class="btn sm:hidden">
+              <X/>
+            </button>
+          </div>
+          <div class="divider my-2"></div>
+          <div class="flex flex-col justify-center items-center bg-gray-300/10 rounded-md p-4 mb-2">
+            <div class="avatar mb-4">
+              <div class="w-24 rounded-full">
+                <img src="https://img.daisyui.com/images/profile/demo/spiderperson@192.webp" />
+              </div>
+            </div>
+            <p class="text-center text-base mb-4">Welcome, <span class="text-emerald-600 font-semibold link link-hover">{{ user?.name }}</span></p>
+          </div>
+          <ul class="flex flex-col justify-start">
+            <li v-for="item in menuItems" :key="item.label" class="text-base my-1">
+            <NuxtLink :to="item.to" class="font-medium" aria-label="close sidebar"  @click="closeDrawer">
+              {{ item.label }}
+            </NuxtLink>
             </li>
           </ul>
-        </div>
-        <a class="btn btn-ghost text-xl">PMS Nuxt</a>
-      </div>
-      <div class="flex-none">
-        <div class="dropdown dropdown-end">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
-            <div class="w-10 rounded-full">
-              <img alt="User Avatar" src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
-            </div>
+          <div class="flex-1 bottom-4 p-4">
+            <button class="absolute bottom-6 btn btn-error btn-soft btn-wide text-md" @click="logout">Logout</button>
           </div>
-          <ul class="menu menu-lg dropdown-content bg-base-100 mt-3 w-52 shadow rounded-box z-10">
-            <li><a>Profile</a></li>
-            <li><a>Settings</a></li>
-            <li><a @click="logout">Logout</a></li>
-          </ul>
         </div>
       </div>
     </div>
-
-    <!-- Main Content -->
-    <main class="flex-1 bg-base-200">
-      <slot />
-    </main>
   </div>
 </template>
 
 <script setup lang="ts">
-const { logout } = useAuth();
+import { X, Menu } from 'lucide-vue-next';
+const { logout, user, fetchUser } = useAuth();
+if (!user.value) await fetchUser();
+const drawerCheckbox = ref<HTMLInputElement | null>(null);
+
+const closeDrawer = () => {
+  if (drawerCheckbox.value && drawerCheckbox.value.checked) {
+    drawerCheckbox.value.checked = false;
+  }
+};
 
 const menuItems = [
   { label: 'Dashboard', to: '/dashboard' },
