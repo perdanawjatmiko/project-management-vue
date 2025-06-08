@@ -2,7 +2,7 @@
   <div class="p-2 md:p-4 lg:p-6">
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold">Projects</h1>
-      <NuxtLink to="/projects/create" class="btn btn-primary">+ New Project</NuxtLink>
+      <NuxtLink to="/projects/create" class="btn btn-primary"><Plus/> New Project</NuxtLink>
     </div>
 
     <div v-if="loading" class="text-center">Loading...</div>
@@ -67,6 +67,7 @@ import CardProject from '~/components/CardProject.vue';
 import { useProject } from '~/composables/useProject';
 import { useAuth } from '~/composables/useAuth';
 import type { Project } from '~/types/project';
+import { Plus } from 'lucide-vue-next'
 
 const { getProjects, deleteProject } = useProject();
 const { user, fetchUser } = useAuth();

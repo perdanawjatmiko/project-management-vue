@@ -101,6 +101,24 @@ export const useProject = () => {
     }
   }
 
+  const getProjectTasks = async (id: string, page: number | 1) => {
+    try {
+      const queryParams = new URLSearchParams();
+      if (page) queryParams.append('page', page.toString());
+
+      const response = await $api<ProjectResponse>(`/projects/${id}/tasks?${queryParams.toString()}`, {
+        method: "GET",
+        baseURL: apiBase,
+        headers: { Authorization: `Bearer ${token.value}` },
+      })
+      console.log(response)
+      return response
+    } catch (e) {
+      console.error('Failed to fetch projects:', e)
+      return null
+    }
+  }
+
   return {
     getProjects,
     createProject,
@@ -109,5 +127,6 @@ export const useProject = () => {
     getProjectById,
     getProjectOptions,
     getProjectCount,
+    getProjectTasks,
   }
 }

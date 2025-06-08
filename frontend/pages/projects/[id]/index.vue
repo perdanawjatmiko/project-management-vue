@@ -56,16 +56,13 @@
                             <h3 class="text-lg font-bold">Add Task</h3>
                             <p class="py-4">Press ESC key or click the button below to close</p>
                             <TaskForm :form="form" :submit="submit" :isModal="true"/>
-                            <form method="dialog">
-                                <!-- if there is a button in form, it will close the modal -->
-                                <button class="btn">Close</button>
-                            </form>
                         </div>
                         </dialog>
                     </div>
-                    <TaskTable v-if="project.tasks && project.tasks.length > 0" :tasks="project.tasks" :showProject="false" />
-                    
-                    <p v-else class="text-gray-500 italic">No tasks found for this project.</p>
+
+                    <TaskTable v-if="tasks.length > 0" :tasks="tasks" :showProject="false" />
+                        <p v-else class="text-gray-500 italic">No tasks found for this project.</p>
+                        <Pagination :currentPage="pagination.current_page" :lastPage="pagination.last_page" @change-page="fetchTasks"/>
                 </div>
             </div>
         </div>
@@ -80,7 +77,7 @@ import TaskForm from '~/components/Forms/TaskForm.vue'
 import TaskTable from '~/components/Tables/TaskTable.vue';
 import { useProject } from '~/composables/useProject'
 import { useTask } from '~/composables/useTask';
-import type { TaskInput } from '~/types/task';
+import type { Task, TaskInput } from '~/types/task';
 
 const router = useRouter();
 const { createTask } = useTask();
@@ -88,7 +85,7 @@ const { createTask } = useTask();
 const route = useRoute()
 const id = route.params.id as string
 
-const { getProjectById } = useProject()
+const { getProjectById, getProjectTasks } = useProject()
 const project = ref<any>(null)
 const loading = ref(true)
 
@@ -111,6 +108,31 @@ const fetchProject = async () => {
     form.value.project_id = project.value.id;
     loading.value = false
 }
+
+const tasks = ref<Task[]>([]);
+const pagination = ref({
+  total: 0,
+  per_page: 10,
+  current_page: 1,
+  last_page: 1
+});
+
+const fetchTasks = async (page = 1) => {
+  try {
+    const res = await getProjectTasks(id, page);
+    if(res) {
+        tasks.value = res.data;
+        pagination.value = {
+          total: res.total,
+          per_page: res.per_page,
+          current_page: res.current_page,
+          last_page: res.last_page
+        };
+    }
+  } catch (err) {
+    console.error('Error fetching tasks:', err);
+  }
+};
 
 const formatDate = (dateStr: string | null) => {
     if (!dateStr) return '-'
@@ -153,5 +175,8 @@ const submit = async () => {
   }
 };
 
-onMounted(fetchProject)
+onMounted(async () => {
+  await fetchProject();
+  await fetchTasks();
+});
 </script>
