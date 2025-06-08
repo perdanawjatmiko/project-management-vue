@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Project;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Auth\Access\AuthorizationException;
@@ -60,6 +61,30 @@ class ProjectController extends Controller
         } catch (\Throwable $e) {
             Log::error('Project Select Error: ' . $e->getMessage());
             return response()->json(['message' => 'Failed to fetch project list'], 500);
+        }
+    }
+
+    public function tasks(Project $project) {
+        try {
+            $query = Task::where('project_id', $project->id)->with(['assigned'])->orderBy('created_at', 'desc');
+
+            $tasks = $query->paginate(5);
+
+            return response()->json([
+                'message' => 'success',
+                'status' => $tasks->isEmpty() ? 204 : 200,
+                'total' => $tasks->total(),
+                'per_page' => $tasks->perPage(),
+                'current_page' => $tasks->currentPage(),
+                'last_page' => $tasks->lastPage(),
+                'data' => $tasks->items()
+            ], 200);
+        } catch (AuthorizationException $e) {
+            Log::error('Project Index Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Unauthorized', 'status' => 403], 403);
+        } catch (\Throwable $e) {
+            Log::error('Project Index Error: ' . $e->getMessage());
+            return response()->json(['message' => 'Failed to load projects'], 500);
         }
     }
 
