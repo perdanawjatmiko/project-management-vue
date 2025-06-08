@@ -21,7 +21,7 @@
         <div class="tab-content bg-base-100 p-4 border-base-300">
           <div v-if="activeTab === 'all'">
             <div v-if="projects.length === 0">No projects found.</div>
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 mb-6">
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
               <CardProject v-for="project in projects" :key="project.id" :project="project" @delete="destroy" />
             </div>
             <!-- Pagination -->

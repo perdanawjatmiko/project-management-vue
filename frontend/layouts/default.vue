@@ -1,7 +1,6 @@
 <template>
   <div>
     <SidebarLayout>
-      <AppHeader/>
       <div class="p-4">
         <slot/>
       </div>
@@ -10,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import SidebarLayout from '~/components/SidebarLayout.vue';
+import SidebarLayout from '~/components/Layouts/SidebarLayout.vue';
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
