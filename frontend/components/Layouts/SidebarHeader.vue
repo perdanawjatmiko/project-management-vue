@@ -13,15 +13,26 @@
           <img src="https://img.daisyui.com/images/profile/demo/yellingcat@192.webp" />
         </div>
       </div>
-      <p class="text-center text-base mb-4">
-        Welcome, <span class="text-emerald-600 font-semibold link link-hover">{{ user?.name }}</span>
-      </p>
+      <div class="collapse w-full bg-base-100 border border-base-200 ">
+        <input type="checkbox" class="peer" />
+        <div class="collapse-title font-semibold p-2 flex items-center justify-center text-emerald-600">
+          {{ user?.name }}
+          <span class="ml-2 transition-transform duration-300 peer-checked:rotate-180">
+            <ChevronDown />
+          </span>
+        </div>
+        <div class="collapse-content text-sm md:text-base px-2 ">
+          <ul class="menu md:menu-md font-semibold bg-transparent rounded-box w-full gap-2 px-0">
+            <li><NuxtLink to="/profile" class=""><UserPen/> Update Profile</NuxtLink></li>
+          </ul>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { X } from 'lucide-vue-next'
+import { X, ChevronDown, UserPen } from 'lucide-vue-next'
 defineProps<{ user: any }>()
 defineEmits(['closeDrawer'])
 </script>

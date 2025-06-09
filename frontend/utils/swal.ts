@@ -10,7 +10,7 @@ export const showSuccess = (message: string) => {
   })
 }
 
-export const showError = (message: string) => {
+export const showErrorNotif = (message: string) => {
   Swal.fire({
     icon: 'error',
     title: 'Error!',

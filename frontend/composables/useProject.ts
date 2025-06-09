@@ -1,6 +1,6 @@
 import type { ProjectCount } from "~/types/dashboard"
 import type { Project, ProjectInput, ProjectOption, ProjectResponse } from "~/types/project"
-import { showSuccess, showError, confirmDelete } from "~/utils/swal"
+import { showSuccess, showErrorNotif, confirmDelete } from "~/utils/swal"
 export const useProject = () => {
   const token = useCookie('token')
   const { $api } = useNuxtApp()
@@ -77,7 +77,7 @@ export const useProject = () => {
       showSuccess('Project updated successfully');
       return response;
     } catch (error: any) {
-      showError(error?.data?.message || 'Failed to update project');
+      showErrorNotif(error?.data?.message || 'Failed to update project');
       return undefined;
     }
   };
@@ -96,7 +96,7 @@ export const useProject = () => {
       showSuccess('Project deleted successfully')
       return true
     } catch (error: any) {
-      showError(error?.data?.message || 'Failed to delete project')
+      showErrorNotif(error?.data?.message || 'Failed to delete project')
       return false
     }
   }

@@ -18,7 +18,7 @@
               {{ task.subject }}
             </NuxtLink>
             <br />
-            <em class="text-xs md:text-sm text-gray-500">{{ task.description }}</em>
+            <!-- <em class="text-xs md:text-sm text-gray-500">{{ task.description }}</em> -->
           </td>
           <td v-if="task.project" class="capitalize text-nowrap">{{ task.project?.name }}</td>
           <td class="capitalize">{{ task.status }}</td>

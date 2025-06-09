@@ -1,6 +1,6 @@
 import type { TaskCount } from "~/types/dashboard";
 import type { Task, TaskResponse } from "~/types/task";
-import { showSuccess, showError, confirmDelete } from "~/utils/swal"
+import { showSuccess, showErrorNotif, confirmDelete } from "~/utils/swal"
 export const useTask = () => {
     const token = useCookie('token');
     const config = useRuntimeConfig()
@@ -101,7 +101,7 @@ export const useTask = () => {
         showSuccess('Task deleted successfully')
         return true
         } catch (error: any) {
-        showError(error?.data?.message || 'Failed to delete project')
+        showErrorNotif(error?.data?.message || 'Failed to delete project')
         return false
         }
     }

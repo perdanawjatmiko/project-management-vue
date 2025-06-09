@@ -1,13 +1,15 @@
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row">
     <div class="drawer lg:drawer-open">
-      <label for="mainSidebar" class="btn btn-ghost drawer-button lg:hidden fixed top-2 left-2">
-        <Menu />
-      </label>
+      <div class="w-full bg-base-100 fixed top-0 z-10 p-2 lg:hidden">
+        <label for="mainSidebar" class="btn btn-ghost drawer-button lg:hidden">
+          <Menu />
+        </label>
+      </div>
       <input id="mainSidebar" type="checkbox" ref="drawerCheckbox" class="drawer-toggle" />
       
       <div class="drawer-content flex flex-col justify-center w-full">
-        <main class="flex-1 bg-base-200 min-h-screen pt-10 sm:pt-6">
+        <main class="flex-1 bg-base-200 min-h-screen pt-16 sm:pt-6">
           <slot />
         </main>
       </div>

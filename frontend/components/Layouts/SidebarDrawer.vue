@@ -1,5 +1,5 @@
 <template>
-  <div class="drawer-side">
+  <div class="drawer-side z-20">
     <label for="mainSidebar" aria-label="close sidebar" class="drawer-overlay"></label>
     <div class="menu bg-base-100 text-base-content min-h-full w-80 p-4 flex-col justify-between">
       <SidebarHeader :user="user" @closeDrawer="$emit('closeDrawer')" />
