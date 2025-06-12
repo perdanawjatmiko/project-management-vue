@@ -5,7 +5,11 @@
       <NuxtLink to="/projects/create" class="btn btn-primary"><Plus/> New Project</NuxtLink>
     </div>
 
-    <div v-if="loading" class="text-center">Loading...</div>
+    <div v-if="loading" class="text-center">
+      <div v-if="loading" class="text-center">
+            <span class="loading loading-dots loading-xl"></span>
+        </div>
+    </div>
 
     <div v-else>
       <div class="tabs tabs-lift">

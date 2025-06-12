@@ -16,7 +16,7 @@ class UserController extends Controller
     public function index()
     {
         try {
-            $users = User::OrderBy('name', 'desc')->get(['id', 'name']);
+            $users = User::OrderBy('name', 'desc')->get(['id', 'name', 'role', 'email']);
 
             if($users->count() == 0) {
                 return response()->json([

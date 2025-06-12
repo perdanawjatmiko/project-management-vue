@@ -20,6 +20,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     async onResponseError({ response }) {
       if ([401, 403, 405].includes(response?.status)) {
         token.value = null
+        alert("Session Expired!, re-login please")
         await router.push('/login')
       }
     },

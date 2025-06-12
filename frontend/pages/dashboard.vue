@@ -4,22 +4,22 @@
     <div class="flex justify-between items-center mb-6">
       <h1 class="text-2xl font-bold">Dashboard Page</h1>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
       <div class="stats shadow bg-base-100">
-        <div class="stat gap-4">
+        <div class="stat gap-4 text-center">
           <div class="stat-title">Project you have</div>
           <div class="stat-value">{{ totalProject }} Projects</div>
           <div class="stat-desc">
-            <NuxtLink to="/projects" class="btn btn-primary btn-wide btn-sm">go to projects</NuxtLink>
+            <NuxtLink to="/projects" class="btn btn-primary btn-wide btn-sm capitalize">go to projects</NuxtLink>
           </div>
         </div>
       </div>
       <div class="stats shadow bg-base-100">
-        <div class="stat gap-4">
+        <div class="stat gap-4 text-center">
           <div class="stat-title">Task you Have</div>
           <div class="stat-value">{{ totalTask }} Tasks</div>
           <div class="stat-desc">
-            <NuxtLink to="/tasks" class="btn btn-primary btn-wide btn-sm">go to tasks</NuxtLink>
+            <NuxtLink to="/tasks" class="btn btn-primary btn-wide btn-sm capitalize">go to tasks</NuxtLink>
           </div>
         </div>
       </div>
