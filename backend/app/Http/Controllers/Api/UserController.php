@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -94,7 +95,20 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        //
+        try {
+            // $this->authorize('view', $user);
+            $data = User::findOrFail($user->id);
+            return response()->json([
+                'message' => 'success',
+                'status' => 200,
+                'data' => $data
+            ], 200);
+        } catch (AuthorizationException $e) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        } catch (\Throwable $e) {
+            Log::error('Project Show Error: '.$e->getMessage());
+            return response()->json(['message' => 'Failed to fetch project'], 500);
+        }
     }
 
     /**
