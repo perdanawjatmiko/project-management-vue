@@ -11,8 +11,8 @@
 
       <div class="card-actions justify-end mt-4">
         <NuxtLink :to="`/projects/${project.id}`" class="btn btn-sm btn-primary">Detail</NuxtLink>
-        <NuxtLink :to="`/projects/${project.id}/edit`" class="btn btn-sm btn-outline">Edit</NuxtLink>
-        <button @click="$emit('delete', project.id, project.name)" class="btn btn-sm btn-error text-white">Delete</button>
+        <NuxtLink v-if="currentUser?.role === 'admin' || currentUser?.id === project.owner_id" :to="`/projects/${project.id}/edit`" class="btn btn-sm btn-outline">Edit</NuxtLink>
+        <button v-if="currentUser?.role === 'admin' || currentUser?.id === project.owner_id" @click="$emit('delete', project.id, project.name)" class="btn btn-sm btn-error text-white">Delete</button>
       </div>
     </div>
   </div>
@@ -20,6 +20,7 @@
 
 <script setup lang="ts">
 import type { Project } from '~/types/project';
+const { user: currentUser } = useAuth()
 
 defineProps<{
   project: Project
