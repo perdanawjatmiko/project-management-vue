@@ -21,8 +21,7 @@
           <td v-if="user.email" class="text-nowrap">{{ user.email }}</td>
           <td class="capitalize">{{ user.role }}</td>
           <td class="flex justify-start items-center gap-1">
-            <NuxtLink :to="`/users/${user.id}/edit`" class="btn btn-xs md:btn-sm btn-secondary">Edit</NuxtLink>
-            <!-- <button @click="destroy(user.id, user.name)" class="btn btn-xs md:btn-sm btn-error">Delete</button> -->
+            <NuxtLink v-if="currentUser?.role === 'admin' || currentUser?.id === user.id" :to="`/users/${user.id}/edit`" class="btn btn-xs md:btn-sm btn-secondary">Edit</NuxtLink>
           </td>
         </tr>
       </tbody>
@@ -32,8 +31,7 @@
 
 <script setup lang="ts">
 import type { User } from '~/types/user'
-import { useUser } from '~/composables/useUser'
-// const { deleteUser } = useUser()
+const { user: currentUser } = useAuth()
 
 const props = defineProps<{
   users: User[]
@@ -42,16 +40,4 @@ const props = defineProps<{
 const emit = defineEmits<{
   (e: 'deleted'): void
 }>()
-
-const destroy = async (id: string, name: string) => {
-//   const confirmed = confirm(`Are you sure you want to delete ${name}?`)
-//   if (!confirmed) return
-
-//   try {
-//     await deleteUser(id)
-//     emit('deleted')
-//   } catch (error) {
-//     console.error('Delete user failed:', error)
-//   }
-}
 </script>
