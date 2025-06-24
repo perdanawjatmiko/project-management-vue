@@ -16,6 +16,7 @@ export const useAuth = () => {
 
       token.value = res.access_token;
       await fetchUser();
+      showSuccess(`Login Success, Welcome !`)
       return true;
     } catch (e) {
       console.error('Login error', e);
@@ -32,6 +33,7 @@ export const useAuth = () => {
 
       token.value = res.access_token;
       await fetchUser();
+      showSuccess(`Register Success, Welcome !`)
       return true;
     } catch (e) {
       console.error('Register error', e);

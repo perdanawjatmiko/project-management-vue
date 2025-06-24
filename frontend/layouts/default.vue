@@ -13,7 +13,6 @@ import SidebarLayout from '~/components/Layouts/SidebarLayout.vue';
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-console.log(route.path)
 
 const getTitleFromRoute = () => {
   const path = route.path

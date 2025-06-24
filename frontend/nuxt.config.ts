@@ -1,19 +1,12 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import tailwindcss from "@tailwindcss/vite";
 export default defineNuxtConfig({
-  // app: {
-  //   head: {
-  //     title: "PMS Nuxt",
-  //     htmlAttrs: {
-  //       lang: 'en',
-  //     }
-  //   }
-  // },
   compatibilityDate: '2025-05-15',
   devtools: { enabled: true },
   runtimeConfig: {
     public: {
-      apiBase: "http://localhost:8000/api",
+      apiBase: process.env.NUXT_PUBLIC_API_BASE ,
+      imageBase: process.env.BASE_IMAGE_URL
     },
   },
   modules: ['@pinia/nuxt'],

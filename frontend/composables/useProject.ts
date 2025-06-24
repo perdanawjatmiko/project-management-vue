@@ -126,7 +126,6 @@ export const useProject = () => {
         baseURL: apiBase,
         headers: { Authorization: `Bearer ${token.value}` },
       })
-      console.log(response)
       return response
     } catch (e) {
       console.error('Failed to fetch projects:', e)
